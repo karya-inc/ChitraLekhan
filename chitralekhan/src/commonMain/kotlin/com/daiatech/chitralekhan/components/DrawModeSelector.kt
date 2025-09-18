@@ -13,11 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daiatech.chitralekhan.R
+import com.daiatech.chitralekhan.Res
+import com.daiatech.chitralekhan.ic_circle
+import com.daiatech.chitralekhan.ic_pencil
+import com.daiatech.chitralekhan.ic_polyline
+import com.daiatech.chitralekhan.ic_rectangle
 import com.daiatech.chitralekhan.models.DrawMode
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
@@ -39,7 +44,7 @@ fun DrawModeSelector(
             onSelect = onSelect
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_pencil),
+                painter = painterResource(resource = Res.drawable.ic_pencil),
                 contentDescription = "free hand drawing",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -50,7 +55,7 @@ fun DrawModeSelector(
             onSelect = onSelect
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_polyline),
+                painter = painterResource(resource = Res.drawable.ic_polyline),
                 contentDescription = "polygon drawing",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -61,7 +66,7 @@ fun DrawModeSelector(
             onSelect = onSelect
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_circle),
+                painter = painterResource(resource = Res.drawable.ic_circle),
                 contentDescription = "circle drawing",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -72,7 +77,7 @@ fun DrawModeSelector(
             onSelect = onSelect
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_rectangle),
+                painter = painterResource(resource = Res.drawable.ic_rectangle),
                 contentDescription = "rectangle drawing",
                 tint = MaterialTheme.colorScheme.onPrimary
             )

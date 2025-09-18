@@ -5,6 +5,7 @@ import com.daiatech.chitralekhan.models.Point
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -101,8 +102,8 @@ fun getVertices(radius: Float, center: Point, sides: Int): MutableList<Point> {
     val x = center.x
     val y = center.y
     for (i in 0 until sides) {
-        val x1 = (x + radius * cos(2 * Math.PI * i / sides)).toFloat()
-        val y1 = (y + radius * sin(2 * Math.PI * i / sides)).toFloat()
+        val x1 = (x + radius * cos(2 * PI * i / sides)).toFloat()
+        val y1 = (y + radius * sin(2 * PI * i / sides)).toFloat()
         vertices.add(Point(x1, y1))
     }
     return vertices

@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.daiatech.chitralekhan.ChitraLekhanCanvas
@@ -34,6 +35,7 @@ import com.daiatech.chitralekhan.components.ChitraLekhanToolbar
 import com.daiatech.chitralekhan.models.DrawMode
 import com.daiatech.chitralekhan.rememberChitraLekhan
 import com.daiatech.chitralekhan.utils.colors
+import com.daiatech.chitralekhan.utils.createBitmapFromStrokes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -66,7 +68,7 @@ fun App() {
         ) {
             imageBitmap?.let { bmp ->
                 val chitraLekhan = rememberChitraLekhan(
-                    image = bmp,
+                    image = bmp.asImageBitmap(),
                     drawMode = DrawMode.FreeHand,
                     color = colors.random(),
                     width = 1f
@@ -76,7 +78,11 @@ fun App() {
                 Button(
                     onClick = {
                         coroutineScope.launch(Dispatchers.IO) {
-                            val bitmap = chitraLekhan.getDrawingAsBitmap()
+                            val bitmap = createBitmapFromStrokes(
+                                chitraLekhan.strokes,
+                                chitraLekhan.imageDisplaySize!!.width,
+                                chitraLekhan.imageDisplaySize!!.height
+                            )
                             val finalBmp = overlayBitmaps(bmp, bitmap)
                             val outputFile = File(context.filesDir, "image.png")
                             FileOutputStream(outputFile).use { os ->

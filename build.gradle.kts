@@ -2,12 +2,15 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.composeHotReload) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.kotlinMultiplatformAndroidLibrary) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
-    alias(libs.plugins.maven.publish)
+    alias(libs.plugins.androidLint) apply false
+    alias(libs.plugins.maven.publish) apply false
+    id("maven-publish")
 }
 
-apply {
-    from("tools/publish-root.gradle")
-}

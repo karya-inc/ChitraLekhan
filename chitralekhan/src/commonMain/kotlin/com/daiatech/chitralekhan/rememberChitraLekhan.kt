@@ -1,9 +1,9 @@
 package com.daiatech.chitralekhan
 
-import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import com.daiatech.chitralekhan.models.DrawMode
 
 @Composable
@@ -11,7 +11,7 @@ fun rememberChitraLekhan(
     color: Color,
     width: Float,
     drawMode: DrawMode = DrawMode.FreeHand,
-    image: Bitmap
+    image: ImageBitmap
 ): ChitraLekhan {
     return remember {
         ChitraLekhan(

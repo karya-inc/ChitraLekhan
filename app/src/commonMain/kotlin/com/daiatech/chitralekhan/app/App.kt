@@ -1,12 +1,5 @@
 package com.daiatech.chitralekhan.app
 
-import android.graphics.Bitmap
-import android.graphics.Bitmap.Config
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,36 +20,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.daiatech.chitralekhan.ChitraLekhanCanvas
 import com.daiatech.chitralekhan.components.ChitraLekhanToolbar
 import com.daiatech.chitralekhan.models.DrawMode
 import com.daiatech.chitralekhan.rememberChitraLekhan
 import com.daiatech.chitralekhan.utils.colors
-import com.daiatech.chitralekhan.utils.createBitmapFromStrokes
-import kotlinx.coroutines.Dispatchers
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.compose.util.toImageBitmap
+import io.github.vinceglb.filekit.dialogs.openFilePicker
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileDescriptor
-import java.io.FileOutputStream
 
 @Composable
 fun App() {
-    var imageBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
-
-    val context = LocalContext.current
-    val mediaPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null) {
-            context.contentResolver.openInputStream(uri)?.use { `is` ->
-                imageBitmap = BitmapFactory.decodeStream(`is`)
-            }
-        }
-    }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -68,7 +48,7 @@ fun App() {
         ) {
             imageBitmap?.let { bmp ->
                 val chitraLekhan = rememberChitraLekhan(
-                    image = bmp.asImageBitmap(),
+                    image = bmp,
                     drawMode = DrawMode.FreeHand,
                     color = colors.random(),
                     width = 1f
@@ -77,18 +57,7 @@ fun App() {
                 ChitraLekhanCanvas(chitraLekhan = chitraLekhan, modifier = Modifier.weight(1f))
                 Button(
                     onClick = {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            val bitmap = createBitmapFromStrokes(
-                                chitraLekhan.strokes,
-                                chitraLekhan.imageDisplaySize!!.width,
-                                chitraLekhan.imageDisplaySize!!.height
-                            )
-                            val finalBmp = overlayBitmaps(bmp, bitmap)
-                            val outputFile = File(context.filesDir, "image.png")
-                            FileOutputStream(outputFile).use { os ->
-                                finalBmp.compress(Bitmap.CompressFormat.PNG, 100, os)
-                            }
-                        }
+                        // Save on disk
                     }
                 ) {
                     Text("Save to gallery")
@@ -116,7 +85,15 @@ fun App() {
                 )
             } ?: run {
                 Row {
-                    Button(onClick = { mediaPicker.launch(PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly)) }) {
+                    Button(
+                        onClick = {
+                            // Pick from disk
+                            coroutineScope.launch {
+                                val imageFile = FileKit.openFilePicker(type = FileKitType.Image)
+                                imageBitmap  = imageFile?.toImageBitmap()
+                            }
+                        }
+                    ) {
                         Text("Pick image")
                     }
                 }
@@ -125,12 +102,4 @@ fun App() {
     }
 }
 
-fun overlayBitmaps(baseBitmap: Bitmap, overlayBitmap: Bitmap): Bitmap {
-    val resultBitmap = Bitmap.createBitmap(baseBitmap.width, baseBitmap.height, Config.ARGB_8888)
-    val canvas = Canvas(resultBitmap)
-    canvas.drawBitmap(baseBitmap, 0f, 0f, null)
-    val scaledOverlayBitmap =
-        Bitmap.createScaledBitmap(overlayBitmap, baseBitmap.width, baseBitmap.height, true)
-    canvas.drawBitmap(scaledOverlayBitmap, 0f, 0f, null)
-    return resultBitmap
-}
+

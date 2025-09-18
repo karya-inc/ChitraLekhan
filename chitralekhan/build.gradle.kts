@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinMultiplatformAndroidLibrary)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     id("maven-publish")
     alias(libs.plugins.maven.publish)
@@ -58,7 +58,7 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
 
-                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.serializationJson)
             }
         }
 

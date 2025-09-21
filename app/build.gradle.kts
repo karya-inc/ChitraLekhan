@@ -37,7 +37,6 @@ kotlin {
 
     sourceSets {
         androidMain {
-            kotlin.srcDir("src/main/kotlin")
             dependencies {
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
